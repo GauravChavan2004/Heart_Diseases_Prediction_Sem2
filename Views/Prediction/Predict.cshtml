@@ -1,0 +1,120 @@
+﻿@model HeartDiseasePrediction.Models.Prediction
+
+@{
+    ViewData["Title"] = "Heart Disease Prediction";
+}
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="text-center mb-4 text-danger">
+            Heart Disease Prediction
+        </h2>
+
+        <form asp-action="Predict" method="post">
+
+            <div class="row">
+                <div class="col-md-6">
+
+                    <label>Patient Name</label>
+
+                    <input asp-for="PatientName"
+                           class="form-control" />
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Age</label>
+                    <input asp-for="Age" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Sex</label>
+                    <select asp-for="Sex" class="form-control">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Chest Pain Type</label>
+                    <select asp-for="ChestPainType" class="form-control">
+                        <option>ATA</option>
+                        <option>NAP</option>
+                        <option>ASY</option>
+                        <option>TA</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Resting Blood Pressure</label>
+                    <input asp-for="RestingBP" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Cholesterol</label>
+                    <input asp-for="Cholesterol" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Fasting Blood Sugar > 120 mg/dl</label>
+                    <select asp-for="FastingBS" class="form-control">
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Resting ECG</label>
+                    <select asp-for="RestingECG" class="form-control">
+                        <option>Normal</option>
+                        <option>ST</option>
+                        <option>LVH</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Maximum Heart Rate</label>
+                    <input asp-for="MaxHR" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Exercise Induced Angina</label>
+                    <select asp-for="ExerciseAngina" class="form-control">
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Oldpeak</label>
+                    <input asp-for="Oldpeak" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>ST Slope</label>
+                    <select asp-for="ST_Slope" class="form-control">
+                        <option>Up</option>
+                        <option>Flat</option>
+                        <option>Down</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger px-5">
+                    Predict
+                </button>
+            </div>
+
+        </form>
+
+        @if (ViewBag.Result != null)
+        {
+            <div class="alert @(ViewBag.Result.Contains("High") ? "alert-danger" : "alert-success") mt-4 text-center">
+                <h4>@ViewBag.Result</h4>
+            </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,299 @@
+﻿@model IEnumerable<HeartDiseasePrediction.Models.Prediction>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-5">
+
+    <h2 class="text-center text-danger mb-5">
+        Heart Disease Analytics Dashboard
+    </h2>
+
+    <!-- CARDS -->
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow p-4 bg-primary text-white rounded-4">
+                <h5>Total Predictions</h5>
+                <h2>@ViewBag.TotalPredictions</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow p-4 bg-danger text-white rounded-4">
+                <h5>High Risk Cases</h5>
+                <h2>@ViewBag.HighRisk</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow p-4 bg-success text-white rounded-4">
+                <h5>Low Risk Cases</h5>
+                <h2>@ViewBag.LowRisk</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow p-4 bg-dark text-white rounded-4">
+
+                <h5>Risk Percentage</h5>
+
+                <h2>@ViewBag.RiskPercentage %</h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow p-4 bg-warning text-dark rounded-4">
+
+                <h5>Model Accuracy</h5>
+
+                <h2>@ViewBag.ModelAccuracy %</h2>
+
+            </div>
+
+        </div>
+        <div class="row mt-4">
+
+            <div class="col-md-4">
+
+                <div class="card shadow p-4 rounded-4">
+
+                    <h5>Average BP</h5>
+
+                    <h3>@ViewBag.AvgBP</h3>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card shadow p-4 rounded-4">
+
+                    <h5>Average Cholesterol</h5>
+
+                    <h3>@ViewBag.AvgCholesterol</h3>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card shadow p-4 rounded-4">
+
+                    <h5>Average Heart Rate</h5>
+
+                    <h3>@ViewBag.AvgHeartRate</h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+
+    <div class="row mt-5">
+
+        <div class="col-md-6">
+
+            <div class="card shadow p-4 rounded-4">
+
+                <h4 class="text-center mb-4">
+                    Risk Analysis Pie Chart
+                </h4>
+
+                <canvas id="riskChart"
+                        style="max-height:350px;">
+                </canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow p-4 rounded-4">
+
+                <h4 class="text-center mb-4">
+                    Prediction Comparison
+                </h4>
+
+                <canvas id="barChart"
+                        style="max-height:350px;">
+                </canvas>
+
+            </div>
+
+        </div>
+        <div class="col-md-6 mt-4">
+
+            <div class="card shadow p-4 rounded-4">
+
+                <h4 class="text-center mb-4">
+                    Gender Distribution
+                </h4>
+
+                <canvas id="genderChart"
+                        style="max-height:350px;">
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RECENT PREDICTIONS -->
+
+    <div class="card shadow mt-5 p-4 rounded-4">
+
+        <h4 class="text-center mb-4">
+            Recent Predictions
+        </h4>
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Patient</th>
+                    <th>Age</th>
+                    <th>Result</th>
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model.Take(5))
+                {
+                    <tr>
+
+                        <td>@item.PatientName</td>
+
+                        <td>@item.Age</td>
+
+                        <td>
+
+                            @if (item.Result.Contains("High"))
+                            {
+                                <span class="badge bg-danger">
+                                    High Risk
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    Low Risk
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>@item.PredictionDate</td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+    // PIE CHART
+
+    const pieCtx =
+        document.getElementById('riskChart');
+
+    new Chart(pieCtx, {
+
+        type: 'pie',
+
+        data: {
+
+            labels: ['High Risk', 'Low Risk'],
+
+            datasets: [{
+
+                data: [
+                    @ViewBag.HighRisk,
+                    @ViewBag.LowRisk
+                ],
+
+                borderWidth: 1
+
+            }]
+        }
+
+    });
+
+    // BAR CHART
+
+    const barCtx =
+        document.getElementById('barChart');
+
+    new Chart(barCtx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: ['High Risk', 'Low Risk'],
+
+            datasets: [{
+
+                label: 'Cases',
+
+                data: [
+                    @ViewBag.HighRisk,
+                    @ViewBag.LowRisk
+                ],
+
+                borderWidth: 1
+
+            }]
+        }
+
+    });
+
+    const genderCtx =
+        document.getElementById('genderChart');
+
+    new Chart(genderCtx, {
+
+        type: 'doughnut',
+
+        data: {
+
+            labels: ['Male', 'Female'],
+
+            datasets: [{
+
+                    data: [
+                    @(ViewBag.MaleCount ?? 0),
+                    @(ViewBag.FemaleCount ?? 0)
+                ],
+
+                borderWidth: 1
+
+            }]
+        }
+
+    });
+</script>

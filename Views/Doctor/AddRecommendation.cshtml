@@ -1,0 +1,51 @@
+﻿@model HeartDiseasePrediction.Models.Prediction
+
+<form method="post">
+
+    <input type="hidden"
+           asp-for="Id" />
+
+    <div class="mb-3">
+
+        <label>
+            Doctor Recommendation
+        </label>
+
+        <textarea asp-for="DoctorRecommendation"
+                  class="form-control"
+                  rows="4"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Suggested Medicine
+        </label>
+
+        <textarea asp-for="SuggestedMedicine"
+                  class="form-control"
+                  rows="3"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Suggested Medical Tests
+        </label>
+
+        <textarea asp-for="SuggestedTests"
+                  class="form-control"
+                  rows="3"></textarea>
+
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary w-100">
+
+        Save Recommendation
+
+    </button>
+
+</form>

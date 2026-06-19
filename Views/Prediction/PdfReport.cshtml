@@ -1,0 +1,102 @@
+﻿@model HeartDiseasePrediction.Models.Prediction
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <style>
+
+        body {
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Heart Disease Prediction Report</h1>
+
+    <hr />
+
+    <table>
+
+        <tr>
+            <th>Age</th>
+            <td>@Model.Age</td>
+        </tr>
+
+        <tr>
+            <th>Gender</th>
+            <td>@Model.Sex</td>
+        </tr>
+
+        <tr>
+            <th>Blood Pressure</th>
+            <td>@Model.RestingBP</td>
+        </tr>
+
+        <tr>
+            <th>Cholesterol</th>
+            <td>@Model.Cholesterol</td>
+        </tr>
+
+        <tr>
+            <th>Maximum Heart Rate</th>
+            <td>@Model.MaxHR</td>
+        </tr>
+
+        <tr>
+            <th>Prediction Result</th>
+            <td>
+                <strong>@Model.Result</strong>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Prediction Date</th>
+            <td>@Model.PredictionDate</td>
+        </tr>
+
+    </table>
+
+    <br />
+
+    <h3>Medical Recommendation</h3>
+
+    @if (Model.Result.Contains("High"))
+    {
+        <p style="color:red;">
+            High risk detected. Please consult a cardiologist.
+        </p>
+    }
+    else
+    {
+        <p style="color:green;">
+            Low risk detected. Maintain healthy lifestyle habits.
+        </p>
+    }
+
+</body>
+
+</html>

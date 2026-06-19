@@ -1,0 +1,91 @@
+﻿@model IEnumerable<HeartDiseasePrediction.Models.Prediction>
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center text-danger mb-4">
+            Prediction History
+        </h2>
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Age</th>
+                    <th>Sex</th>
+                    <th>BP</th>
+                    <th>Cholesterol</th>
+                    <th>Max HR</th>
+                    <th>Result</th>
+                    <th>Doctor Recommendation</th>
+                    <th>Medicine</th>
+                    <th>Tests</th>
+                    <th>Date</th>
+                    <th>Report</th>
+                    <th>Recommended By</th>
+                    <th>Recommendation Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.PatientName</td>
+                        <td>@item.Age</td>
+                        <td>@item.Sex</td>
+                        <td>@item.RestingBP</td>
+                        <td>@item.Cholesterol</td>
+                        <td>@item.MaxHR</td>
+                        <td>
+                            @if (item.Result.Contains("High"))
+                            {
+                                <span class="badge bg-danger">
+                                    @item.Result
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    @item.Result
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @item.DoctorRecommendation
+                        </td>
+
+                        <td>
+                            @item.SuggestedMedicine
+                        </td>
+
+                        <td>
+                            @item.SuggestedTests
+                        </td>
+
+                        <td>@item.PredictionDate</td>
+                        <td>
+                            <a asp-action="GeneratePdf"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-primary">
+
+                                Download PDF
+
+                            </a>
+                        </td>
+                        <td>@item.RecommendedBy</td>
+
+                        <td>@item.RecommendationDate</td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+        </div>
+    </div>
+
+</div>

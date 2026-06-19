@@ -1,0 +1,109 @@
+﻿@model IEnumerable<HeartDiseasePrediction.Models.Prediction>
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center text-warning mb-4">
+            All Predictions
+        </h2>
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Patient Name</th>
+
+                    <th>Age</th>
+
+                    <th>Gender</th>
+
+                    <th>BP</th>
+
+                    <th>Cholesterol</th>
+
+                    <th>Heart Rate</th>
+
+                    <th>Result</th>
+
+                    <th>Recommendation</th>
+
+                    <th>Medicine</th>
+
+                    <th>Tests</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.Id</td>
+
+                        <td>
+                            @item.PatientName
+                        </td>
+
+                        <td>@item.Age</td>
+
+                        <td>@item.Sex</td>
+
+                        <td>@item.RestingBP</td>
+
+                        <td>@item.Cholesterol</td>
+
+                        <td>@item.MaxHR</td>
+
+                        <td>
+
+                            @if (item.Result.Contains("High"))
+                            {
+                                <span class="badge bg-danger">
+                                    High Risk
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    Low Risk
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+                            @item.DoctorRecommendation
+                        </td>
+
+                        <td>
+                            @item.SuggestedMedicine
+                        </td>
+
+                        <td>
+                            @item.SuggestedTests
+                        </td>
+
+                        <td>
+                            @item.PredictionDate
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

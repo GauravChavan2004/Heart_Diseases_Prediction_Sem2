@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HeartDiseasePrediction.Models.Doctor>
+
+<div class="container mt-5">
+
+    <h2 class="text-center text-success mb-4">
+        All Doctors
+    </h2>
+
+    <table class="table table-bordered table-striped">
+
+        <thead class="table-dark">
+
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Hospital</th>
+                <th>Action</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.Id</td>
+
+                    <td>@item.DoctorName</td>
+
+                    <td>@item.Email</td>
+
+                    <td>@item.HospitalName</td>
+
+                    <td>
+
+                        <a asp-controller="Admin"
+                           asp-action="DeleteDoctor"
+                           asp-route-id="@item.Id"
+                           class="btn btn-danger btn-sm">
+
+                            Delete
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
