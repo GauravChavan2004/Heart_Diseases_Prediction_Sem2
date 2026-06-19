@@ -1,91 +1,193 @@
 ﻿@model IEnumerable<HeartDiseasePrediction.Models.Prediction>
 
-<div class="container mt-5">
+@{
+    ViewData["Title"] = "Prediction History";
+}
 
-    <div class="card shadow p-4">
+<style>
+    /* View Container Adjustments */
+    .history-section {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
 
-        <h2 class="text-center text-danger mb-4">
-            Prediction History
-        </h2>
-        <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+    .history-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
 
-            <thead class="table-dark">
-                <tr>
-                    <th>Patient Name</th>
-                    <th>Age</th>
-                    <th>Sex</th>
-                    <th>BP</th>
-                    <th>Cholesterol</th>
-                    <th>Max HR</th>
-                    <th>Result</th>
-                    <th>Doctor Recommendation</th>
-                    <th>Medicine</th>
-                    <th>Tests</th>
-                    <th>Date</th>
-                    <th>Report</th>
-                    <th>Recommended By</th>
-                    <th>Recommendation Date</th>
-                </tr>
-            </thead>
+    .history-title {
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        background: linear-gradient(135deg, #e63946 0%, #b51724 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-            <tbody>
+    /* Premium Modern Table Structure */
+    .custom-table-wrapper {
+        border-radius: 16px;
+        overflow-x: auto !important; /* Force explicit horizontal scrolling activation */
+        border: 1px solid #e2e8f0;
+        background-color: #ffffff;
+    }
 
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.PatientName</td>
-                        <td>@item.Age</td>
-                        <td>@item.Sex</td>
-                        <td>@item.RestingBP</td>
-                        <td>@item.Cholesterol</td>
-                        <td>@item.MaxHR</td>
-                        <td>
-                            @if (item.Result.Contains("High"))
-                            {
-                                <span class="badge bg-danger">
-                                    @item.Result
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success">
-                                    @item.Result
-                                </span>
-                            }
-                        </td>
-                        <td>
-                            @item.DoctorRecommendation
-                        </td>
+        /* FORCED SCROLLBAR ENGINE: Ensures scrollbar is highly visible across all devices */
+        .custom-table-wrapper::-webkit-scrollbar {
+            height: 10px; /* Explicit height for the horizontal scrollbar bar track */
+            display: block !important;
+        }
 
-                        <td>
-                            @item.SuggestedMedicine
-                        </td>
+        .custom-table-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9; /* Soft light gray track background */
+            border-radius: 0 0 16px 16px;
+        }
 
-                        <td>
-                            @item.SuggestedTests
-                        </td>
+        .custom-table-wrapper::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Visible gray scroll thumb slider */
+            border-radius: 20px;
+            border: 2px solid #f1f5f9; /* Clear breathing padding surrounding the thumb slider */
+        }
 
-                        <td>@item.PredictionDate</td>
-                        <td>
-                            <a asp-action="GeneratePdf"
-                               asp-route-id="@item.Id"
-                               class="btn btn-sm btn-primary">
+            .custom-table-wrapper::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8; /* Darker accent indicator on hover interaction states */
+            }
 
-                                Download PDF
+    .table-modern {
+        margin-bottom: 0;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
 
-                            </a>
-                        </td>
-                        <td>@item.RecommendedBy</td>
+        /* Style headings exactly matching user layout requirements */
+        .table-modern thead th {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            padding: 16px 20px;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
 
-                        <td>@item.RecommendationDate</td>
-                    </tr>
-                }
+        .table-modern tbody td {
+            padding: 16px 20px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            white-space: nowrap;
+        }
 
-            </tbody>
+        .table-modern tbody tr:last-child td {
+            border-bottom: none;
+        }
 
-        </table>
+        .table-modern tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+            .table-modern tbody tr:hover {
+                background-color: #f8fafc !important;
+            }
+
+    /* Custom Badges & Actions Styling */
+    .badge-modern {
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .btn-download-modern {
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        color: #475569;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 6px 14px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-download-modern:hover {
+            background-color: #f8fafc;
+            border-color: #94a3b8;
+            color: #1e293b;
+            transform: translateY(-1px);
+        }
+</style>
+
+<div class="container history-section">
+    <div class="card history-card shadow-lg p-4" data-aos="fade-up" data-aos-duration="800">
+
+        <div class="mb-4">
+            <h2 class="history-title mb-1">Prediction History</h2>
+            <p class="text-muted small mb-0">Consolidated deployment registry mapping real-time diagnostic outputs against clinician evaluations.</p>
         </div>
-    </div>
 
+        <!-- Scrollable content wrapper with explicit visible bar styling injected -->
+        <div class="table-responsive custom-table-wrapper shadow-sm">
+            <table class="table table-modern table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>BP</th>
+                        <th>Cholesterol</th>
+                        <th>Max HR</th>
+                        <th>Result</th>
+                        <th>Doctor Recommendation</th>
+                        <th>Medicine</th>
+                        <th>Tests</th>
+                        <th>Date</th>
+                        <th>Report</th>
+                        <th>Recommended By</th>
+                        <th>Recommendation Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark">@item.PatientName</td>
+                            <td>@item.Age</td>
+                            <td>@item.Sex</td>
+                            <td>@item.RestingBP</td>
+                            <td>@item.Cholesterol</td>
+                            <td>@item.MaxHR</td>
+                            <td>
+                                @if (item.Result.Contains("High"))
+                                {
+                                    <span class="badge badge-modern bg-danger text-white">
+                                        @item.Result
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-modern bg-success text-white">
+                                        @item.Result
+                                    </span>
+                                }
+                            </td>
+                            <td>@item.DoctorRecommendation</td>
+                            <td>@item.SuggestedMedicine</td>
+                            <td>@item.SuggestedTests</td>
+                            <td class="text-muted small">@item.PredictionDate</td>
+                            <td>
+                                <a asp-action="GeneratePdf" asp-route-id="@item.Id" class="btn btn-sm btn-download-modern shadow-sm">
+                                    <i class="fas fa-file-pdf text-danger me-1"></i> Download PDF
+                                </a>
+                            </td>
+                            <td>@item.RecommendedBy</td>
+                            <td class="text-muted small">@item.RecommendationDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>

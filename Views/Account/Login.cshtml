@@ -1,51 +1,106 @@
-﻿<div class="container mt-5">
+﻿@{
+    ViewData["Title"] = "User Login";
+}
 
+<style>
+    .auth-section { padding: 80px 0; }
+    .auth-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        transition: transform 0.3s ease;
+    }
+    .auth-title {
+        font-weight: 700;
+        letter-spacing: -1px;
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .form-group-custom { position: relative; margin-bottom: 1.25rem; }
+    .form-group-custom label {
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .input-icon-wrapper { position: relative; }
+    .input-icon-wrapper i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        transition: color 0.3s ease;
+    }
+    .form-control-custom {
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        padding: 12px 16px 12px 45px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+    .form-control-custom:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+        outline: none;
+    }
+    .form-control-custom:focus + i { color: #0d6efd; }
+    .btn-submit-custom {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white !important;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+    }
+    .btn-submit-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
+    }
+</style>
+
+<div class="container auth-section">
     <div class="row justify-content-center">
-
-        <div class="col-md-5">
-
-            <div class="card shadow p-4">
-
-                <h2 class="text-center text-primary mb-4">
-                    User Login
-                </h2>
+        <div class="col-lg-5 col-md-7" data-aos="fade-up" data-aos-duration="800">
+            <div class="card auth-card shadow-lg p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 55px; height: 55px; background: #e3f2fd;">
+                        <i class="fas fa-user text-primary fa-lg"></i>
+                    </div>
+                    <h2 class="auth-title mb-1">User Login</h2>
+                    <p class="text-muted small">Access your patient diagnostic tracking pipeline.</p>
+                </div>
 
                 <form method="post">
-
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email"
-                               name="email"
-                               class="form-control" />
+                    <div class="form-group-custom">
+                        <label>Email Address</label>
+                        <div class="input-icon-wrapper">
+                            <input type="email" name="email" class="form-control form-control-custom w-100" placeholder="name@example.com" required />
+                            <i class="fas fa-envelope"></i>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group-custom">
                         <label>Password</label>
-                        <input type="password"
-                               name="password"
-                               class="form-control" />
+                        <div class="input-icon-wrapper">
+                            <input type="password" name="password" class="form-control form-control-custom w-100" placeholder="••••••••" required />
+                            <i class="fas fa-lock"></i>
+                        </div>
                     </div>
 
-                    <button type="submit"
-                            class="btn btn-primary w-100">
-
-                        Login
-
+                    <button type="submit" class="btn btn-submit-custom w-100 mt-2">
+                        Sign In <i class="fas fa-sign-in-alt ms-2 small"></i>
                     </button>
-
                 </form>
 
-                @if (ViewBag.Message != null)
-                {
-                    <div class="alert alert-danger mt-3">
-                        @ViewBag.Message
-                    </div>
+                @if (ViewBag.Message != null) {
+                    <div class="alert alert-danger rounded-3 mt-4 text-center small mb-0"><i class="fas fa-exclamation-circle me-2"></i> @ViewBag.Message</div>
                 }
-
             </div>
-
         </div>
-
     </div>
-
 </div>

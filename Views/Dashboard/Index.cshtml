@@ -1,299 +1,412 @@
 ﻿@model IEnumerable<HeartDiseasePrediction.Models.Prediction>
 
+@{
+    ViewData["Title"] = "Heart Disease Analytics Dashboard";
+}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="container mt-5">
+<style>
+    .analytics-section {
+        padding-top: 40px;
+        padding-bottom: 80px;
+    }
 
-    <h2 class="text-center text-danger mb-5">
-        Heart Disease Analytics Dashboard
-    </h2>
+    .analytics-title {
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        background: linear-gradient(135deg, #e63946 0%, #b51724 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-    <!-- CARDS -->
+    /* Minimalist High-End Metric Cards Overhaul */
+    .metric-card-custom {
+        border: none;
+        border-radius: 20px;
+        background: #ffffff;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 125px;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-    <div class="row g-4">
+        .metric-card-custom:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05) !important;
+        }
 
-        <div class="col-md-3">
-            <div class="card shadow p-4 bg-primary text-white rounded-4">
+        .metric-card-custom h5 {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .metric-card-custom h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            letter-spacing: -1px;
+        }
+
+    /* Left Border Accent Modifiers to replace harsh solid colors */
+    .accent-total {
+        border-left: 5px solid #3b82f6;
+    }
+
+    .accent-high {
+        border-left: 5px solid #ef4444;
+    }
+
+    .accent-low {
+        border-left: 5px solid #10b981;
+    }
+
+    .accent-percentage {
+        border-left: 5px solid #64748b;
+    }
+
+    .accent-accuracy {
+        border-left: 5px solid #f59e0b;
+    }
+
+    .accent-total h2 {
+        color: #2563eb;
+    }
+
+    .accent-high h2 {
+        color: #dc2626;
+    }
+
+    .accent-low h2 {
+        color: #16a34a;
+    }
+
+    .accent-percentage h2 {
+        color: #1e293b;
+    }
+
+    .accent-accuracy h2 {
+        color: #d97706;
+    }
+
+    /* Secondary Clinical Average Information Widgets */
+    .avg-card-custom {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+    }
+
+        .avg-card-custom h5 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .avg-card-custom h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0;
+            font-monospace: inherit;
+        }
+
+    /* Data Visualization Canvas Card Layouts */
+    .chart-container-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+
+        .chart-container-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.3px;
+        }
+
+    /* Recent Table Registry Layout Styling */
+    .registry-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+
+        .registry-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+    .table-clean {
+        margin-bottom: 0;
+        font-size: 0.9rem;
+    }
+
+        .table-clean thead th {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table-clean tbody td {
+            padding: 14px 18px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .table-clean tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .badge-modern {
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.78rem;
+    }
+</style>
+
+<div class="container analytics-section">
+
+    <div class="mb-5 text-center">
+        <h2 class="analytics-title mb-1">Heart Disease Analytics Dashboard</h2>
+        <p class="text-muted small">Real-time model deployment insights, variable calculations, and aggregate clinical trends.</p>
+    </div>
+
+    <div class="row g-4 mb-4" data-aos="fade-up" data-aos-duration="600">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card metric-card-custom accent-total shadow-sm">
                 <h5>Total Predictions</h5>
                 <h2>@ViewBag.TotalPredictions</h2>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card shadow p-4 bg-danger text-white rounded-4">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card metric-card-custom accent-high shadow-sm">
                 <h5>High Risk Cases</h5>
                 <h2>@ViewBag.HighRisk</h2>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card shadow p-4 bg-success text-white rounded-4">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card metric-card-custom accent-low shadow-sm">
                 <h5>Low Risk Cases</h5>
                 <h2>@ViewBag.LowRisk</h2>
             </div>
         </div>
-
-        <div class="col-md-3">
-
-            <div class="card shadow p-4 bg-dark text-white rounded-4">
-
+        <div class="col-xl-3 col-md-6">
+            <div class="card metric-card-custom accent-percentage shadow-sm">
                 <h5>Risk Percentage</h5>
-
-                <h2>@ViewBag.RiskPercentage %</h2>
-
+                <h2>@ViewBag.RiskPercentage%</h2>
             </div>
-
         </div>
-
-        <div class="col-md-3">
-
-            <div class="card shadow p-4 bg-warning text-dark rounded-4">
-
+        <div class="col-xl-3 col-md-6">
+            <div class="card metric-card-custom accent-accuracy shadow-sm">
                 <h5>Model Accuracy</h5>
-
-                <h2>@ViewBag.ModelAccuracy %</h2>
-
+                <h2>@ViewBag.ModelAccuracy%</h2>
             </div>
-
         </div>
-        <div class="row mt-4">
+    </div>
 
-            <div class="col-md-4">
-
-                <div class="card shadow p-4 rounded-4">
-
+    <div class="row g-3 mb-5" data-aos="fade-up" data-aos-delay="100" data-aos-duration="600">
+        <div class="col-md-4">
+            <div class="card avg-card-custom shadow-sm d-flex flex-row align-items-center gap-3">
+                <div class="rounded-3 p-3 bg-light-primary text-primary" style="background: #e3f2fd; color: #0d6efd;"><i class="fas fa-heartbeat fa-lg"></i></div>
+                <div>
                     <h5>Average BP</h5>
-
                     <h3>@ViewBag.AvgBP</h3>
-
                 </div>
-
             </div>
-
-            <div class="col-md-4">
-
-                <div class="card shadow p-4 rounded-4">
-
+        </div>
+        <div class="col-md-4">
+            <div class="card avg-card-custom shadow-sm d-flex flex-row align-items-center gap-3">
+                <div class="rounded-3 p-3 bg-light-danger text-danger" style="background: #ffebee; color: #e63946;"><i class="fas fa-vial fa-lg"></i></div>
+                <div>
                     <h5>Average Cholesterol</h5>
-
                     <h3>@ViewBag.AvgCholesterol</h3>
-
                 </div>
-
             </div>
-
-            <div class="col-md-4">
-
-                <div class="card shadow p-4 rounded-4">
-
+        </div>
+        <div class="col-md-4">
+            <div class="card avg-card-custom shadow-sm d-flex flex-row align-items-center gap-3">
+                <div class="rounded-3 p-3 bg-light-success text-success" style="background: #e8f5e9; color: #198754;"><i class="fas fa-wave-square fa-lg"></i></div>
+                <div>
                     <h5>Average Heart Rate</h5>
-
                     <h3>@ViewBag.AvgHeartRate</h3>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- CHARTS -->
-
-    <div class="row mt-5">
-
-        <div class="col-md-6">
-
-            <div class="card shadow p-4 rounded-4">
-
-                <h4 class="text-center mb-4">
-                    Risk Analysis Pie Chart
-                </h4>
-
-                <canvas id="riskChart"
-                        style="max-height:350px;">
-                </canvas>
-
+    <div class="row g-4" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+        <div class="col-lg-4 col-md-6">
+            <div class="card chart-container-card shadow-sm p-4">
+                <h4 class="text-center mb-4">Risk Analysis Pie Chart</h4>
+                <div class="mx-auto" style="position: relative; width:100%; max-width:280px;">
+                    <canvas id="riskChart"></canvas>
+                </div>
             </div>
-
         </div>
 
-        <div class="col-md-6">
-
-            <div class="card shadow p-4 rounded-4">
-
-                <h4 class="text-center mb-4">
-                    Prediction Comparison
-                </h4>
-
-                <canvas id="barChart"
-                        style="max-height:350px;">
-                </canvas>
-
+        <div class="col-lg-4 col-md-6">
+            <div class="card chart-container-card shadow-sm p-4">
+                <h4 class="text-center mb-4">Prediction Comparison</h4>
+                <div style="position: relative; width:100%; height:280px;">
+                    <canvas id="barChart"></canvas>
+                </div>
             </div>
-
-        </div>
-        <div class="col-md-6 mt-4">
-
-            <div class="card shadow p-4 rounded-4">
-
-                <h4 class="text-center mb-4">
-                    Gender Distribution
-                </h4>
-
-                <canvas id="genderChart"
-                        style="max-height:350px;">
-                </canvas>
-
-            </div>
-
         </div>
 
+        <div class="col-lg-4 col-md-12">
+            <div class="card chart-container-card shadow-sm p-4">
+                <h4 class="text-center mb-4">Gender Distribution</h4>
+                <div class="mx-auto" style="position: relative; width:100%; max-width:280px;">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- RECENT PREDICTIONS -->
-
-    <div class="card shadow mt-5 p-4 rounded-4">
-
-        <h4 class="text-center mb-4">
-            Recent Predictions
-        </h4>
-
-        <table class="table table-bordered table-striped">
-
-            <thead class="table-dark">
-
-                <tr>
-
-                    <th>Patient</th>
-                    <th>Age</th>
-                    <th>Result</th>
-                    <th>Date</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @foreach (var item in Model.Take(5))
-                {
+    <div class="card registry-card shadow-lg mt-5 p-4" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">
+        <h4 class="mb-4 text-center text-md-start px-2"><i class="fas fa-history text-muted me-2 small"></i>Recent Predictions Registry</h4>
+        <div class="table-responsive rounded-3 border">
+            <table class="table table-clean table-hover align-middle mb-0">
+                <thead>
                     <tr>
-
-                        <td>@item.PatientName</td>
-
-                        <td>@item.Age</td>
-
-                        <td>
-
-                            @if (item.Result.Contains("High"))
-                            {
-                                <span class="badge bg-danger">
-                                    High Risk
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success">
-                                    Low Risk
-                                </span>
-                            }
-
-                        </td>
-
-                        <td>@item.PredictionDate</td>
-
+                        <th>Patient Full Name</th>
+                        <th>Age Axis</th>
+                        <th>Classification Result</th>
+                        <th>Diagnostic Date</th>
                     </tr>
-                }
-
-            </tbody>
-
-        </table>
-
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Take(5))
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark">@item.PatientName</td>
+                            <td><span class="fw-medium">@item.Age</span> <span class="text-muted small">yrs</span></td>
+                            <td>
+                                @if (item.Result.Contains("High"))
+                                {
+                                    <span class="badge badge-modern bg-danger text-white">High Risk</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-modern bg-success text-white">Low Risk</span>
+                                }
+                            </td>
+                            <td class="text-muted font-monospace small">@item.PredictionDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>
 
 <script>
+    // System Chart UI Defaults Configurations Adjustments
+    Chart.defaults.font.family = "'Plus Jakarta Sans', 'Segoe UI', sans-serif";
+    Chart.defaults.font.color = "#64748b";
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
 
-    // PIE CHART
-
-    const pieCtx =
-        document.getElementById('riskChart');
-
+    // RISK ANALYSIS PIE GRAPH
+    const pieCtx = document.getElementById('riskChart');
     new Chart(pieCtx, {
-
         type: 'pie',
-
         data: {
-
             labels: ['High Risk', 'Low Risk'],
-
             datasets: [{
-
-                data: [
-                    @ViewBag.HighRisk,
-                    @ViewBag.LowRisk
-                ],
-
-                borderWidth: 1
-
+                data: [@ViewBag.HighRisk, @ViewBag.LowRisk],
+                backgroundColor: ['#ef4444', '#10b981'],
+                hoverBackgroundColor: ['#dc2626', '#059669'],
+                borderWidth: 2,
+                borderColor: '#ffffff'
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 20, font: { weight: 600, size: 12 } } }
+            }
         }
-
     });
 
-    // BAR CHART
-
-    const barCtx =
-        document.getElementById('barChart');
-
+    // CASES COMPARISON VERTICAL BAR GRAPH
+    const barCtx = document.getElementById('barChart');
     new Chart(barCtx, {
-
         type: 'bar',
-
         data: {
-
             labels: ['High Risk', 'Low Risk'],
-
             datasets: [{
-
-                label: 'Cases',
-
-                data: [
-                    @ViewBag.HighRisk,
-                    @ViewBag.LowRisk
-                ],
-
-                borderWidth: 1
-
+                label: 'Diagnosed Cases',
+                data: [@ViewBag.HighRisk, @ViewBag.LowRisk],
+                backgroundColor: ['rgba(239, 68, 68, 0.85)', 'rgba(16, 185, 129, 0.85)'],
+                borderColor: ['#ef4444', '#10b981'],
+                borderWidth: 1.5,
+                borderRadius: 8,
+                barThickness: 45
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { borderDash: [5, 5], color: '#e2e8f0' },
+                    ticks: { font: { weight: 500 } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { weight: 600 } }
+                }
+            }
         }
-
     });
 
-    const genderCtx =
-        document.getElementById('genderChart');
-
+    // DEMOGRAPHICS DISTRIBUTION GENDER DOUGHNUT
+    const genderCtx = document.getElementById('genderChart');
     new Chart(genderCtx, {
-
         type: 'doughnut',
-
         data: {
-
             labels: ['Male', 'Female'],
-
             datasets: [{
-
-                    data: [
-                    @(ViewBag.MaleCount ?? 0),
-                    @(ViewBag.FemaleCount ?? 0)
-                ],
-
-                borderWidth: 1
-
+                data: [@(ViewBag.MaleCount ?? 0), @(ViewBag.FemaleCount ?? 0)],
+                backgroundColor: ['#3b82f6', '#ec4899'],
+                hoverBackgroundColor: ['#2563eb', '#db2777'],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                cutout: '70%'
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 20, font: { weight: 600, size: 12 } } }
+            }
         }
-
     });
 </script>

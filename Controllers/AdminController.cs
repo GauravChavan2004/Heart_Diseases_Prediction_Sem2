@@ -59,9 +59,20 @@ namespace HeartDiseasePrediction.Controllers
             ViewBag.FemaleCount = predictions.Count(x => x.Sex == "Female");
 
             // AVERAGES
-            ViewBag.AvgBP = predictions.Any() ? Math.Round(predictions.Average(x => x.RestingBP), 2) : 0;
-            ViewBag.AvgCholesterol = predictions.Any() ? Math.Round(predictions.Average(x => x.Cholesterol), 2) : 0;
-            ViewBag.AvgHeartRate = predictions.Any() ? Math.Round(predictions.Average(x => x.MaxHR), 2) : 0;
+            ViewBag.AvgBP =
+                predictions.Any()
+                ? Math.Round((double)predictions.Average(x => x.RestingBP), 2)
+                : 0;
+
+            ViewBag.AvgCholesterol =
+                predictions.Any()
+                ? Math.Round((double)predictions.Average(x => x.Cholesterol), 2)
+                : 0;
+
+            ViewBag.AvgHeartRate =
+                predictions.Any()
+                ? Math.Round((double)predictions.Average(x => x.MaxHR), 2)
+                : 0;
 
             // Render the shared dashboard view and pass the model (predictions)
             return View("~/Views/Dashboard/Index.cshtml", predictions);

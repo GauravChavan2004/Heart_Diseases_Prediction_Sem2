@@ -1,120 +1,304 @@
 ﻿@model HeartDiseasePrediction.Models.Prediction
 
 @{
-    ViewData["Title"] = "Heart Disease Prediction";
+    ViewData["Title"] = "Heart Disease Prediction Pipeline";
 }
 
-<div class="container mt-5">
-    <div class="card shadow p-4">
-        <h2 class="text-center mb-4 text-danger">
-            Heart Disease Prediction
-        </h2>
+<style>
+    .prediction-container {
+        padding-top: 50px;
+        padding-bottom: 80px;
+    }
 
-        <form asp-action="Predict" method="post">
+    .form-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
 
-            <div class="row">
-                <div class="col-md-6">
+    .form-header-title {
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        background: linear-gradient(135deg, #e63946 0%, #b51724 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-                    <label>Patient Name</label>
+    /* Professional Diagnostic Input Controls */
+    .field-wrapper {
+        margin-bottom: 1.25rem;
+    }
 
-                    <input asp-for="PatientName"
-                           class="form-control" />
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Age</label>
-                    <input asp-for="Age" class="form-control" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Sex</label>
-                    <select asp-for="Sex" class="form-control">
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Chest Pain Type</label>
-                    <select asp-for="ChestPainType" class="form-control">
-                        <option>ATA</option>
-                        <option>NAP</option>
-                        <option>ASY</option>
-                        <option>TA</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Resting Blood Pressure</label>
-                    <input asp-for="RestingBP" class="form-control" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Cholesterol</label>
-                    <input asp-for="Cholesterol" class="form-control" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Fasting Blood Sugar > 120 mg/dl</label>
-                    <select asp-for="FastingBS" class="form-control">
-                        <option>Yes</option>
-                        <option>No</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Resting ECG</label>
-                    <select asp-for="RestingECG" class="form-control">
-                        <option>Normal</option>
-                        <option>ST</option>
-                        <option>LVH</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Maximum Heart Rate</label>
-                    <input asp-for="MaxHR" class="form-control" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Exercise Induced Angina</label>
-                    <select asp-for="ExerciseAngina" class="form-control">
-                        <option>Yes</option>
-                        <option>No</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Oldpeak</label>
-                    <input asp-for="Oldpeak" class="form-control" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label>ST Slope</label>
-                    <select asp-for="ST_Slope" class="form-control">
-                        <option>Up</option>
-                        <option>Flat</option>
-                        <option>Down</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-danger px-5">
-                    Predict
-                </button>
-            </div>
-
-        </form>
-
-        @if (ViewBag.Result != null)
-        {
-            <div class="alert @(ViewBag.Result.Contains("High") ? "alert-danger" : "alert-success") mt-4 text-center">
-                <h4>@ViewBag.Result</h4>
-            </div>
+        .field-wrapper label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.88rem;
+            margin-bottom: 6px;
+            display: block;
         }
 
+    .input-group-custom {
+        position: relative;
+    }
+
+        .input-group-custom i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 5;
+            transition: color 0.3s ease;
+        }
+
+    .form-control-custom, .form-select-custom {
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        padding: 12px 16px 12px 45px;
+        font-size: 0.95rem;
+        color: #1e293b;
+        background-color: #ffffff;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .form-select-custom {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 12px;
+    }
+
+        .form-control-custom:focus, .form-select-custom:focus {
+            border-color: #e63946;
+            box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1);
+            outline: none;
+        }
+
+            .form-control-custom:focus + i, .form-select-custom:focus + i {
+                color: #e63946;
+            }
+
+    /* Submit Button Section */
+    .btn-predict-custom {
+        background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+        color: white !important;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 40px;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 12px rgba(193, 18, 31, 0.2);
+    }
+
+        .btn-predict-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(193, 18, 31, 0.35);
+        }
+
+    /* Result Banners */
+    .result-card {
+        border-radius: 16px;
+        border: none;
+        font-weight: 600;
+    }
+
+    .section-divider {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
+        font-weight: 700;
+        border-bottom: 1px dashed #e2e8f0;
+        padding-bottom: 6px;
+        margin-bottom: 16px;
+    }
+</style>
+
+<div class="container prediction-container">
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10" data-aos="fade-up" data-aos-duration="800">
+
+            <div class="card form-card shadow-lg p-4 p-md-5">
+
+                <div class="text-center mb-5">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-light-danger rounded-circle mb-3" style="width: 60px; height: 60px; background: #ffebee;">
+                        <i class="fas fa-heartbeat fa-lg text-danger"></i>
+                    </div>
+                    <h2 class="form-header-title mb-1">Heart Disease Prediction Engine</h2>
+                    <p class="text-muted small">Input clinical variables extracted from diagnostic datasets to feed into the computational model.</p>
+                </div>
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" class="alert alert-danger rounded-3 mb-4 p-3 small"></div>
+                }
+
+                <form asp-action="Predict" method="post">
+
+                    <div class="section-divider">Patient Demographics</div>
+                    <div class="row">
+                        <div class="col-md-5 field-wrapper">
+                            <label>Patient Full Name</label>
+                            <div class="input-group-custom">
+                                <input asp-for="PatientName" class="form-control form-control-custom w-100" placeholder="e.g., Jane Smith" />
+                                <i class="fas fa-user-injured"></i>
+                            </div>
+                            <span asp-validation-for="PatientName" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-3 field-wrapper">
+                            <label>Age</label>
+                            <div class="input-group-custom">
+                                <input asp-for="Age" class="form-control form-control-custom w-100" placeholder="Years" />
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <span asp-validation-for="Age" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-4 field-wrapper">
+                            <label>Biological Sex</label>
+                            <div class="input-group-custom">
+                                <select asp-for="Sex" class="form-select form-select-custom w-100">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                                <i class="fas fa-venus-mars"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mt-2">Cardiovascular Evaluation Parameters</div>
+                    <div class="row">
+                        <div class="col-md-6 field-wrapper">
+                            <label>Chest Pain Manifestation</label>
+                            <div class="input-group-custom">
+                                <select asp-for="ChestPainType" class="form-select form-select-custom w-100">
+                                    <option value="ATA">ATA (Atypical Angina)</option>
+                                    <option value="NAP">NAP (Non-Anginal Pain)</option>
+                                    <option value="ASY">ASY (Asymptomatic)</option>
+                                    <option value="TA">TA (Typical Angina)</option>
+                                </select>
+                                <i class="fas fa-notes-medical"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper">
+                            <label>Resting Blood Pressure (mm Hg)</label>
+                            <div class="input-group-custom">
+                                <input asp-for="RestingBP" class="form-control form-control-custom w-100" placeholder="e.g., 120" />
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <span asp-validation-for="RestingBP" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper">
+                            <label>Serum Cholesterol (mg/dl)</label>
+                            <div class="input-group-custom">
+                                <input asp-for="Cholesterol" class="form-control form-control-custom w-100" placeholder="e.g., 200" />
+                                <i class="fas fa-vial"></i>
+                            </div>
+                            <span asp-validation-for="Cholesterol" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper">
+                            <label>Fasting Blood Sugar > 120 mg/dl</label>
+                            <div class="input-group-custom">
+                                <select asp-for="FastingBS" class="form-select form-select-custom w-100">
+                                    <option>No</option>
+                                    <option>Yes</option>
+                                </select>
+                                <i class="fas fa-apple-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mt-2">Electrocardiogram & Stress Analysis</div>
+                    <div class="row">
+                        <div class="col-md-6 field-wrapper">
+                            <label>Resting ECG Results</label>
+                            <div class="input-group-custom">
+                                <select asp-for="RestingECG" class="form-select form-select-custom w-100">
+                                    <option>Normal</option>
+                                    <option>ST</option>
+                                    <option>LVH</option>
+                                </select>
+                                <i class="fas fa-wave-square"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper">
+                            <label>Max Heart Rate Achieved (bpm)</label>
+                            <div class="input-group-custom">
+                                <input asp-for="MaxHR" class="form-control form-control-custom w-100" placeholder="e.g., 150" />
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <span asp-validation-for="MaxHR" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper">
+                            <label>Exercise Induced Angina</label>
+                            <div class="input-group-custom">
+                                <select asp-for="ExerciseAngina" class="form-select form-select-custom w-100">
+                                    <option>No</option>
+                                    <option>Yes</option>
+                                </select>
+                                <i class="fas fa-running"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper">
+                            <label>Oldpeak (ST Depression value)</label>
+                            <div class="input-group-custom">
+                                <input asp-for="Oldpeak" class="form-control form-control-custom w-100" placeholder="e.g., 1.5" />
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span asp-validation-for="Oldpeak" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-6 field-wrapper mb-4">
+                            <label>Peak Exercise ST Segment Slope</label>
+                            <div class="input-group-custom">
+                                <select asp-for="ST_Slope" class="form-select form-select-custom w-100">
+                                    <option>Up</option>
+                                    <option>Flat</option>
+                                    <option>Down</option>
+                                </select>
+                                <i class="fas fa-angle-double-up"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-predict-custom btn-lg px-5 py-3 fs-6">
+                            Execute Diagnostic Evaluation <i class="fas fa-cogs ms-2 small"></i>
+                        </button>
+                    </div>
+
+                </form>
+
+                @if (ViewBag.Result != null)
+                {
+                    var isHighRisk = ViewBag.Result.Contains("High") || ViewBag.Result.Contains("Positive") || ViewBag.Result.Contains("1");
+
+                    <div class="alert shadow-sm p-4 text-center mt-5 result-card @(isHighRisk ? "alert-danger text-danger-emphasis bg-danger-subtle" : "alert-success text-success-emphasis bg-success-subtle") animate__animated animate__fadeIn">
+                        <div class="d-flex align-items-center justify-content-center gap-3">
+                            <i class="fas @(isHighRisk ? "fa-exclamation-triangle fa-2x" : "fa-check-circle fa-2x")"></i>
+                            <div class="text-start">
+                                <h5 class="mb-1 fw-bold">Evaluation Completed</h5>
+                                <p class="mb-0 fs-6 fw-normal">@ViewBag.Result</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

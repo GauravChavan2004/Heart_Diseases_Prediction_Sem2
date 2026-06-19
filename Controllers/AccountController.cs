@@ -22,6 +22,10 @@ namespace HeartDiseasePrediction.Controllers
         [HttpPost]
         public IActionResult Register(User model, string ConfirmPassword)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             // Email already exists
             var existingUser = _context.Users
                 .FirstOrDefault(x => x.Email == model.Email);
@@ -55,6 +59,17 @@ namespace HeartDiseasePrediction.Controllers
         [HttpPost]
         public IActionResult Login(string email, string password)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                ViewBag.Message = "Email is required";
+                return View();
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                ViewBag.Message = "Password is required";
+                return View();
+            }   
             var user = _context.Users.FirstOrDefault(x =>
                 x.Email == email &&
                 x.Password == password);

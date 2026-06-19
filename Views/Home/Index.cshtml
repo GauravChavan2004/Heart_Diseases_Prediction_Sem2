@@ -1,79 +1,147 @@
-﻿<div class="hero-section text-center">
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <div class="container">
+<style>
+    /* View-Specific Page Enhancements */
+    .hero-section {
+        background: linear-gradient(135deg, #ff4d5a 0%, #c1121f 100%);
+        color: white;
+        padding: 120px 0 150px 0;
+        border-radius: 0 0 50px 50px;
+        box-shadow: 0 15px 30px rgba(193, 18, 31, 0.12);
+    }
 
-        <h1 class="hero-title">
-            Heart Disease Prediction System
-        </h1>
+    .hero-title {
+        font-size: 54px;
+        font-weight: 700;
+        letter-spacing: -1.5px;
+    }
 
-        <p class="lead mt-4">
-            AI-powered healthcare prediction using Machine Learning
+    .btn-custom-light {
+        background: #ffffff;
+        color: #c1121f !important;
+        font-weight: 600;
+        border-radius: 12px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+        .btn-custom-light:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            background: #fff5f5;
+        }
+
+    /* Floating Interactive Feature Cards */
+    .custom-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid rgba(0, 0, 0, 0.01);
+    }
+
+        .custom-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important;
+        }
+
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        margin: 0 auto 24px auto;
+        transition: transform 0.4s ease;
+    }
+
+    .custom-card:hover .icon-box {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .bg-light-danger {
+        background: #ffebee;
+        color: #e63946;
+    }
+
+    .bg-light-primary {
+        background: #e3f2fd;
+        color: #0d6efd;
+    }
+
+    .bg-light-success {
+        background: #e8f5e9;
+        color: #198754;
+    }
+
+    .custom-card h4 {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+    }
+
+    .custom-card p {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+</style>
+
+<div class="hero-section text-center">
+    <div class="container" data-aos="fade-up">
+        <h1 class="hero-title mb-3">Heart Disease Prediction System</h1>
+        <p class="lead mb-4 mx-auto opacity-90" style="max-width: 600px;">
+            AI-powered healthcare prediction system built using intelligent Machine Learning modules.
         </p>
-
-        <a asp-controller="Prediction"
-           asp-action="Predict"
-           class="btn btn-light btn-lg mt-4 px-5">
-
-            Predict Now
-
+        <a asp-controller="Prediction" asp-action="Predict" class="btn btn-custom-light btn-lg px-5 py-3 fs-6">
+            Predict Now <i class="fas fa-arrow-right ms-2 small"></i>
         </a>
-
     </div>
-
 </div>
 
-<div class="container mt-5">
+<div class="container" style="margin-top: -60px; position: relative; z-index: 10;">
+    <div class="row g-4 justify-content-center">
 
-    <div class="row text-center">
-
-        <div class="col-md-4">
-
-            <div class="card shadow p-4">
-
-                <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
-
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card custom-card shadow-sm p-4 text-center h-100">
+                <div class="icon-box bg-light-danger">
+                    <i class="fas fa-heartbeat fa-2x"></i>
+                </div>
                 <h4>AI Prediction</h4>
-
-                <p>
-                    Predict heart disease risk using machine learning.
+                <p class="mb-0">
+                    Predict heart disease risk parameters swiftly utilizing highly trained computational metrics.
                 </p>
-
             </div>
-
         </div>
 
-        <div class="col-md-4">
-
-            <div class="card shadow p-4">
-
-                <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
-
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card custom-card shadow-sm p-4 text-center h-100">
+                <div class="icon-box bg-light-primary">
+                    <i class="fas fa-chart-line fa-2x"></i>
+                </div>
                 <h4>Analytics Dashboard</h4>
-
-                <p>
-                    Analyze patient prediction statistics visually.
+                <p class="mb-0">
+                    Analyze historic patient prediction statistics visually with clean data tracking.
                 </p>
-
             </div>
-
         </div>
 
-        <div class="col-md-4">
-
-            <div class="card shadow p-4">
-
-                <i class="fas fa-user-md fa-3x text-success mb-3"></i>
-
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="card custom-card shadow-sm p-4 text-center h-100">
+                <div class="icon-box bg-light-success">
+                    <i class="fas fa-user-md fa-2x"></i>
+                </div>
                 <h4>Healthcare Support</h4>
-
-                <p>
-                    Improve healthcare decisions using AI insights.
+                <p class="mb-0">
+                    Improve modern clinical actions using tailored insights and machine learning assistance.
                 </p>
-
             </div>
-
         </div>
 
     </div>
-
 </div>

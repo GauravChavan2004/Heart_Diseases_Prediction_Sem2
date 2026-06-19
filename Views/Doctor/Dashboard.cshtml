@@ -1,26 +1,162 @@
 ﻿@model IEnumerable<HeartDiseasePrediction.Models.Prediction>
 
-<div class="container mt-5">
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
 
-    <div class="card shadow p-4">
+<style>
+    /* Portal Layout Container */
+    .dashboard-section {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
 
-        <h2 class="text-center text-primary mb-4">
-            Doctor Dashboard
-        </h2>
+    .dashboard-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
 
-        <p class="text-center">
-            Welcome Dr.
-            <strong>
-                @Context.Session.GetString("DoctorName")
-            </strong>
-        </p>
+    .dashboard-title {
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-        <hr />
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+    .welcome-box {
+        background: #f0f7ff;
+        border-radius: 12px;
+        padding: 10px 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #0284c7;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
 
-                <thead class="table-dark">
+    /* Enhanced Scrollbar Table Wrapper */
+    .custom-table-wrapper {
+        border-radius: 16px;
+        overflow-x: auto !important;
+        border: 1px solid #e2e8f0;
+        background-color: #ffffff;
+    }
 
+        /* CUSTOM HORIZONTAL SCROLLBAR: Always visible across browsers */
+        .custom-table-wrapper::-webkit-scrollbar {
+            height: 10px;
+            display: block !important;
+        }
+
+        .custom-table-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .custom-table-wrapper::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+            border: 2px solid #f1f5f9;
+        }
+
+            .custom-table-wrapper::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+
+    /* Professional Clinical Table Elements */
+    .table-modern {
+        margin-bottom: 0;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+
+        .table-modern thead th {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            padding: 16px 20px;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .table-modern tbody td {
+            padding: 16px 20px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            white-space: nowrap;
+        }
+
+        .table-modern tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-modern tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+            .table-modern tbody tr:hover {
+                background-color: #f8fafc !important;
+            }
+
+    /* Dynamic Clinical Interaction Elements */
+    .badge-modern {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .btn-action-recommend {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white !important;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        padding: 8px 14px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15);
+    }
+
+        .btn-action-recommend:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(13, 110, 253, 0.25);
+        }
+
+    .cell-patient-name {
+        font-weight: 600;
+        color: #1e293b;
+    }
+</style>
+
+<div class="container dashboard-section">
+    <div class="card dashboard-card shadow-lg p-4" data-aos="fade-up" data-aos-duration="800">
+
+        <!-- Dashboard Header Area -->
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="dashboard-title mb-1">Doctor Dashboard</h2>
+                <div class="welcome-box mt-1">
+                    <i class="fas fa-user-md"></i>
+                    <span>Welcome, <strong>Dr. @Context.Session.GetString("DoctorName")</strong></span>
+                </div>
+            </div>
+            <div class="bg-light rounded-3 px-3 py-2 border d-flex align-items-center gap-2">
+                <i class="fas fa-stethoscope text-muted"></i>
+                <span class="small fw-semibold text-secondary">Registry Cases: @Model.Count()</span>
+            </div>
+        </div>
+
+        <!-- Fully Scrollable Clinical Grid Workspace -->
+        <div class="table-responsive custom-table-wrapper shadow-sm">
+            <table class="table table-modern table-hover align-middle">
+                <thead>
                     <tr>
                         <th>Patient Name</th>
                         <th>Age</th>
@@ -38,83 +174,67 @@
                         <th>Recommended By</th>
                         <th>Recommendation Date</th>
                     </tr>
-
                 </thead>
-
                 <tbody>
-
                     @foreach (var item in Model)
                     {
                         <tr>
-
-                            <td>@item.PatientName</td>
-
-                            <td>@item.Age</td>
-
+                            <td class="cell-patient-name">@item.PatientName</td>
+                            <td><span class="fw-medium">@item.Age</span> <span class="text-muted small">yrs</span></td>
                             <td>@item.Sex</td>
-
-                            <td>@item.RestingBP</td>
-
-                            <td>@item.Cholesterol</td>
-
-                            <td>@item.MaxHR</td>
-
+                            <td class="font-monospace">@item.RestingBP</td>
+                            <td class="font-monospace">@item.Cholesterol</td>
+                            <td class="font-monospace">@item.MaxHR</td>
                             <td>@item.Result</td>
-                            <td>
-                                @item.DoctorRecommendation
-                            </td>
+                            <td class="text-secondary">@(string.IsNullOrEmpty(item.DoctorRecommendation) ? "—" : item.DoctorRecommendation)</td>
+                            <td class="text-secondary">@(string.IsNullOrEmpty(item.SuggestedMedicine) ? "—" : item.SuggestedMedicine)</td>
+                            <td class="text-secondary">@(string.IsNullOrEmpty(item.SuggestedTests) ? "—" : item.SuggestedTests)</td>
 
+                            <!-- Action Dispatch Trigger -->
                             <td>
-                                @item.SuggestedMedicine
-                            </td>
-
-                            <td>
-                                @item.SuggestedTests
-                            </td>
-
-                            <td>
-
                                 <a asp-controller="Doctor"
                                    asp-action="AddRecommendation"
                                    asp-route-id="@item.Id"
-                                   class="btn btn-primary btn-sm">
-
-                                    Add Recommendation
-
+                                   class="btn btn-sm btn-action-recommend d-inline-flex align-items-center gap-1">
+                                    <i class="fas fa-file-medical-alt small"></i> Add Recommendation
                                 </a>
-
                             </td>
-                            <td>
 
+                            <!-- Structured Status Badge Module -->
+                            <td>
                                 @if (item.Result.Contains("High"))
                                 {
-                                    <span class="badge bg-danger">
+                                    <span class="badge badge-modern bg-danger text-white">
                                         High Risk
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-success">
+                                    <span class="badge badge-modern bg-success text-white">
                                         Low Risk
                                     </span>
                                 }
-
                             </td>
 
+                            <td class="text-muted small font-monospace">@item.PredictionDate</td>
                             <td>
-                                @item.PredictionDate
+                                @if (!string.IsNullOrEmpty(item.RecommendedBy))
+                                {
+                                    <span class="fw-medium text-dark"><i class="fas fa-check-double text-success me-1 small"></i> @item.RecommendedBy</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small italic">Unassigned</span>
+                                }
                             </td>
-                            <td>@item.RecommendedBy</td>
-
-                            <td>@item.RecommendationDate</td>
+                            <td class="text-muted small font-monospace">
+                                @(item.RecommendationDate != null ? item.RecommendationDate.ToString() : "—")
+                            </td>
                         </tr>
                     }
-
                 </tbody>
-
             </table>
         </div>
 
     </div>
-
 </div>

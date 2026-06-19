@@ -28,6 +28,10 @@ namespace HeartDiseasePrediction.Controllers
         [HttpPost]
         public async Task<IActionResult> Predict(Prediction model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var mlData = new
             {
                 Age = model.Age,
@@ -110,11 +114,17 @@ namespace HeartDiseasePrediction.Controllers
         }
         public IActionResult GeneratePdf(int id)
         {
-            var prediction = _context.Predictions.FirstOrDefault(p => p.Id == id);
+            var prediction = _context.Predictions
+                .FirstOrDefault(p => p.Id == id);
+
+            if (prediction == null)
+            {
+                return NotFound();
+            }
 
             return new ViewAsPdf("PdfReport", prediction)
             {
-                FileName = "HeartDiseaseReport.pdf"
+                FileName = $"HeartReport_{prediction.PatientName}.pdf"
             };
         }
     }

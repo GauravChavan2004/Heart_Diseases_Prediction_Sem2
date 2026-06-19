@@ -7,26 +7,73 @@
 
     <meta charset="utf-8" />
 
+    <title>Heart Disease Report</title>
+
     <style>
 
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             padding: 30px;
+            color: #333;
         }
 
-        h1 {
-            color: #dc3545;
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
+
+            .header h1 {
+                color: #dc3545;
+                margin-bottom: 5px;
+            }
+
+            .header p {
+                color: gray;
+                font-size: 14px;
+            }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #000;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            width: 35%;
+            text-align: left;
+        }
+
+        th, td {
             padding: 10px;
+        }
+
+        .high-risk {
+            color: red;
+            font-weight: bold;
+        }
+
+        .low-risk {
+            color: green;
+            font-weight: bold;
+        }
+
+        .section-title {
+            margin-top: 25px;
+            color: #0d6efd;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: gray;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
         }
 
     </style>
@@ -35,11 +82,31 @@
 
 <body>
 
-    <h1>Heart Disease Prediction Report</h1>
+    <div class="header">
+
+        <h1>Heart Disease Prediction Report</h1>
+
+        <p>HeartCare AI - Intelligent Healthcare System</p>
+
+    </div>
 
     <hr />
 
+    <p>
+        <strong>Report ID:</strong> @Model.Id
+    </p>
+
+    <p>
+        <strong>Generated On:</strong>
+        @DateTime.Now.ToString("dd-MM-yyyy hh:mm tt")
+    </p>
+
     <table>
+
+        <tr>
+            <th>Patient Name</th>
+            <td>@Model.PatientName</td>
+        </tr>
 
         <tr>
             <th>Age</th>
@@ -68,9 +135,24 @@
 
         <tr>
             <th>Prediction Result</th>
+
             <td>
-                <strong>@Model.Result</strong>
+
+                @if (Model.Result.Contains("High"))
+                {
+                    <span class="high-risk">
+                        @Model.Result
+                    </span>
+                }
+                else
+                {
+                    <span class="low-risk">
+                        @Model.Result
+                    </span>
+                }
+
             </td>
+
         </tr>
 
         <tr>
@@ -80,22 +162,89 @@
 
     </table>
 
-    <br />
+    <h3 class="section-title">
+        Doctor Recommendation
+    </h3>
 
-    <h3>Medical Recommendation</h3>
+    <table>
+
+        <tr>
+            <th>Doctor Recommendation</th>
+            <td>
+                @(string.IsNullOrEmpty(Model.DoctorRecommendation)
+                                ? "Not Available"
+                                : Model.DoctorRecommendation)
+            </td>
+        </tr>
+
+        <tr>
+            <th>Suggested Medicine</th>
+            <td>
+                @(string.IsNullOrEmpty(Model.SuggestedMedicine)
+                                ? "Not Available"
+                                : Model.SuggestedMedicine)
+            </td>
+        </tr>
+
+        <tr>
+            <th>Suggested Tests</th>
+            <td>
+                @(string.IsNullOrEmpty(Model.SuggestedTests)
+                                ? "Not Available"
+                                : Model.SuggestedTests)
+            </td>
+        </tr>
+
+        <tr>
+            <th>Recommended By</th>
+            <td>
+                @(string.IsNullOrEmpty(Model.RecommendedBy)
+                                ? "Not Available"
+                                : Model.RecommendedBy)
+            </td>
+        </tr>
+
+        <tr>
+            <th>Recommendation Date</th>
+            <td>
+                @(Model.RecommendationDate.HasValue
+                                ? Model.RecommendationDate.Value.ToString("dd-MM-yyyy hh:mm tt")
+                                : "Not Available")
+            </td>
+        </tr>
+
+    </table>
+
+    <h3 class="section-title">
+        Medical Advice
+    </h3>
 
     @if (Model.Result.Contains("High"))
     {
-        <p style="color:red;">
-            High risk detected. Please consult a cardiologist.
+        <p class="high-risk">
+            High Risk Detected.
+            Please consult a cardiologist immediately and follow the prescribed medication and tests.
         </p>
     }
     else
     {
-        <p style="color:green;">
-            Low risk detected. Maintain healthy lifestyle habits.
+        <p class="low-risk">
+            Low Risk Detected.
+            Maintain a healthy lifestyle, exercise regularly, and follow routine health checkups.
         </p>
     }
+
+    <div class="footer">
+
+        <p>
+            © 2026 HeartCare AI. All academic research rights reserved.
+        </p>
+
+        <p>
+            MCA Mini Project using ASP.NET Core MVC + Flask Machine Learning API
+        </p>
+
+    </div>
 
 </body>
 

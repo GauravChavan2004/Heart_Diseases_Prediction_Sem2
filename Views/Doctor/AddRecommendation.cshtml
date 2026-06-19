@@ -1,51 +1,170 @@
 ﻿@model HeartDiseasePrediction.Models.Prediction
 
-<form method="post">
+@{
+    ViewData["Title"] = "Prescribe Clinical Recommendation";
+}
 
-    <input type="hidden"
-           asp-for="Id" />
+<style>
+    /* Clinical Input Panel Container */
+    .recommendation-panel {
+        padding-top: 50px;
+        padding-bottom: 80px;
+    }
 
-    <div class="mb-3">
+    .prescription-card {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
 
-        <label>
-            Doctor Recommendation
-        </label>
+    .prescription-title {
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-        <textarea asp-for="DoctorRecommendation"
-                  class="form-control"
-                  rows="4"></textarea>
+    /* Professional Form Group Overhaul */
+    .clinical-group-custom {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
 
+        .clinical-group-custom label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .clinical-group-custom label i {
+                color: #94a3b8;
+                font-size: 0.95rem;
+            }
+
+    .textarea-icon-wrapper {
+        position: relative;
+    }
+
+    .form-textarea-custom {
+        border-radius: 14px;
+        border: 1.5px solid #e2e8f0;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+        color: #1e293b;
+        background-color: #ffffff;
+        line-height: 1.6;
+        resize: vertical;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+        .form-textarea-custom:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+            outline: none;
+            background-color: #fff;
+        }
+
+    /* Direct Label/Icon activation state on textarea focus */
+    .clinical-group-custom:focus-within label {
+        color: #0d6efd;
+    }
+
+        .clinical-group-custom:focus-within label i {
+            color: #0d6efd;
+        }
+
+    /* Submit Button Styles */
+    .btn-save-recommendation {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white !important;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+    }
+
+        .btn-save-recommendation:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.35);
+        }
+</style>
+
+<div class="container recommendation-panel">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9" data-aos="fade-up" data-aos-duration="800">
+
+            <div class="card prescription-card shadow-lg p-4 p-md-5">
+
+                <!-- Clinical Header Block -->
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 60px; height: 60px; background: #e3f2fd;">
+                        <i class="fas fa-file-prescription fa-lg text-primary"></i>
+                    </div>
+                    <h2 class="prescription-title mb-1">Clinical Intervention Entry</h2>
+                    <p class="text-muted small">Update patient records with post-diagnostic treatment regimes, therapeutics, and lab monitoring criteria.</p>
+                </div>
+
+                <form method="post">
+
+                    <!-- Exact Data Frame Binding Reference -->
+                    <input type="hidden" asp-for="Id" />
+
+                    <!-- Doctor Recommendation Textarea -->
+                    <div class="clinical-group-custom">
+                        <label>
+                            <i class="fas fa-user-md"></i> Doctor Recommendation
+                        </label>
+                        <div class="textarea-icon-wrapper">
+                            <textarea asp-for="DoctorRecommendation"
+                                      class="form-control form-textarea-custom w-100"
+                                      rows="4"
+                                      placeholder="Provide diagnostic insights, lifestyle adjustments, physical workload restrictions, or general clinical guidance..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Suggested Medicine Textarea -->
+                    <div class="clinical-group-custom">
+                        <label>
+                            <i class="fas fa-pills"></i> Suggested Medicine
+                        </label>
+                        <div class="textarea-icon-wrapper">
+                            <textarea asp-for="SuggestedMedicine"
+                                      class="form-control form-textarea-custom w-100"
+                                      rows="3"
+                                      placeholder="Specify pharmaceutical drug details, therapeutic dosages, and exact intervals (e.g., statins, beta-blockers)..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Suggested Medical Tests Textarea -->
+                    <div class="clinical-group-custom">
+                        <label>
+                            <i class="fas fa-microscope"></i> Suggested Medical Tests
+                        </label>
+                        <div class="textarea-icon-wrapper">
+                            <textarea asp-for="SuggestedTests"
+                                      class="form-control form-textarea-custom w-100"
+                                      rows="3"
+                                      placeholder="List follow-up laboratory workflows or cardiac reviews (e.g., Echocardiogram, Repeat Serum Lipid Panels, Exercise Stress Profile)..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submission Action Deck -->
+                    <button type="submit" class="btn btn-save-recommendation w-100 mt-2 py-3 fs-6">
+                        Save Recommendation & Commit Records <i class="fas fa-check-circle ms-2 small"></i>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
     </div>
-
-    <div class="mb-3">
-
-        <label>
-            Suggested Medicine
-        </label>
-
-        <textarea asp-for="SuggestedMedicine"
-                  class="form-control"
-                  rows="3"></textarea>
-
-    </div>
-
-    <div class="mb-3">
-
-        <label>
-            Suggested Medical Tests
-        </label>
-
-        <textarea asp-for="SuggestedTests"
-                  class="form-control"
-                  rows="3"></textarea>
-
-    </div>
-
-    <button type="submit"
-            class="btn btn-primary w-100">
-
-        Save Recommendation
-
-    </button>
-
-</form>
+</div>

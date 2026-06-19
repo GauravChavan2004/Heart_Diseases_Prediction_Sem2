@@ -4,6 +4,7 @@ using HeartDiseasePrediction.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeartDiseasePrediction.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260619104048_FixPredictionNullable")]
+    partial class FixPredictionNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,8 +100,7 @@ namespace HeartDiseasePrediction.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Age")
-                        .IsRequired()
+                    b.Property<int>("Age")
                         .HasColumnType("int");
 
                     b.Property<string>("ChestPainType")
@@ -106,26 +108,21 @@ namespace HeartDiseasePrediction.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Cholesterol")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("DoctorRecommendation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExerciseAngina")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FastingBS")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("MaxHR")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<float?>("Oldpeak")
-                        .IsRequired()
                         .HasColumnType("real");
 
                     b.Property<string>("PatientName")
@@ -142,19 +139,15 @@ namespace HeartDiseasePrediction.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RestingBP")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("RestingECG")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Result")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ST_Slope")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sex")

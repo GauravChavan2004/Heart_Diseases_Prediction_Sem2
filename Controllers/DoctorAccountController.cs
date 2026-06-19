@@ -25,6 +25,10 @@ namespace HeartDiseasePrediction.Controllers
             Doctor model,
             string ConfirmPassword)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             // Check existing email
             var existingDoctor = _context.Doctors
                 .FirstOrDefault(x => x.Email == model.Email);
